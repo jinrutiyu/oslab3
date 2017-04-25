@@ -51,6 +51,12 @@ void irqHandle(struct TrapFrame *tf) {
 		case 0x80:
 			syscallHandle(tf);
 			break;
+		case 1000://Timer
+			if(current->time_count=0)
+			{
+				schedule();
+			}
+			break;
 		default:assert(0);
 	}
 	asm volatile("movw %%ax,%%es\n\t"

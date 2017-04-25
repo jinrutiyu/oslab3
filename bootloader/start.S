@@ -39,7 +39,7 @@ gdt:
         .word 0xffff,0                  #数据段描述符
         .byte 0,0x92,0xcf,0
         
-        .word 0xffff,0x8000             #视频段描述符
+        .word 0xffff,0x8000             #视频段描述符b8000
         .byte 0x0b,0x92,0xcf,0
         #...
 

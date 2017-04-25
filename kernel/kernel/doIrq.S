@@ -15,6 +15,9 @@
 .globl no12;   no12:             pushl   $12; jmp asmDoIrq
 .globl no13;   no13:             pushl   $13; jmp asmDoIrq
 .globl no14;   no14:             pushl   $14; jmp asmDoIrq
+.globl intr0; intr0: cli;pushl $1000; jmp asm_do_irq
+
+
 
 .globl irqEmpty;
 			irqEmpty:	pushl $0;  pushl   $-1; jmp asmDoIrq

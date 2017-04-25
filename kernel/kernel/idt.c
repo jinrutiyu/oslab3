@@ -51,6 +51,9 @@ void irqEmpty();
 void irqGProtectFault();
 void irqSyscall();
 
+void intr0();
+
+
 void initIdt() {
 	int i;
 	/* 为了防止系统异常终止，所有irq都有处理函数(irqEmpty)。 */
@@ -80,7 +83,10 @@ void initIdt() {
 
 	setTrap(idt + 0xd, SEG_KCODE, (uint32_t)irqGProtectFault, DPL_KERN);
 	
-	setIntr(idt + 0x80, SEG_KCODE, (uint32_t)irqSyscall, DPL_USER); // for int 0x80, interrupt vector is 0x80, Interruption is disabled
+	setTrap(idt + 0x80, SEG_KCODE, (uint32_t)irqSyscall, DPL_USER); // for int 0x80, interrupt vector is 0x80, Interruption is disabled
+
+	//timer
+	set_intr(idt+ 32 + 0, SEG_KCODE, (uint32_t)intr0, DPL_KERN);
 
 	/* 写入IDT */
 	saveIdt(idt, sizeof(idt));
