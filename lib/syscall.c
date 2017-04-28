@@ -141,3 +141,15 @@ void printf(char *format,...){
 	syscall(SYS_write,1,(int32_t)buff,ptr,0,0);
 	ptr=0;
 }
+
+int sleep(int sleep_time){
+	return syscall(SYS_nanosleep,sleep_time,0,0,0,0);
+}
+
+int exit(){
+	return syscall(SYS_exit,0,0,0,0,0);
+}
+
+int fork(){
+	return syscall(SYS_fork,0,0,0,0,0);
+}

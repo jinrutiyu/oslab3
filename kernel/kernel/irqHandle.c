@@ -7,6 +7,9 @@ static int line=5;
 static int col=0;
 
 #define pattern 0x0c
+
+
+
 void showCharInScreen(char ch){
 	if(ch!='\n')
 	{
@@ -52,12 +55,13 @@ void irqHandle(struct TrapFrame *tf) {
 			syscallHandle(tf);
 			break;
 		case 1000://Timer
-			if(current->time_count=0)
-			{
-				schedule();
-			}
+			Log("time 1000");
+			// if(current->time_count=0)
+			// {
+			// 	schedule();
+			// }
 			break;
-		default:assert(0);
+		default:Log("%d",tf->irq);assert(0);
 	}
 	asm volatile("movw %%ax,%%es\n\t"
 				 "movw %%ax,%%ds\n\t"
@@ -83,7 +87,7 @@ void syscallHandle(struct TrapFrame *tf) {
 		           	ch=*(buf++);
 		            if (ch == '\0') 
 		            	break;
-					extern void putChar(char ch);
+
 		            putChar(ch);
 		            showCharInScreen(ch);
 		            retlen++;		
@@ -94,6 +98,19 @@ void syscallHandle(struct TrapFrame *tf) {
 			{
 				assert(0);
 			}
+			break;
+		}
+
+		case SYS_exit:
+		{
+			break;
+		}
+		case SYS_fork:
+		{
+			break;
+		}
+		case SYS_nanosleep:
+		{
 			break;
 		}
 		default: assert(0);

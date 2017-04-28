@@ -3,6 +3,8 @@
 int data = 0;
 
 int uEntry(void) {
+    while(1);
+    
     int ret = fork();
     int i = 8;
 
