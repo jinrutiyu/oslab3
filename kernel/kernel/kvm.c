@@ -1,5 +1,8 @@
 #include "x86.h"
 #include "device.h"
+#include "process.h"
+
+extern ProcessTable idle;
 
 SegDesc gdt[NR_SEGMENTS];
 TSS tss;
@@ -48,7 +51,8 @@ void initSeg() {
 
 	/*设置正确的段寄存器*/
 	tss.ss0=KSEL(SEG_KDATA);
-	tss.esp0=0x200000;
+	// tss.esp0=0x200000;
+	tss.esp0=(uint32_t)((char *)&idle.state);
 
 	asm volatile(	"movw %%ax,%%es\n\t"
 					"movw %%ax,%%ds\n\t"
@@ -69,7 +73,8 @@ void enterUserSpace(uint32_t entry) {
 	asm volatile(	"cli		   \n\t"
 					"movw %%ax,%%es\n\t"
 					"movw %%ax,%%fs\n\t"
-					"movw %%ax,%%ds    "
+					"movw %%ax,%%ds\n\t"
+					"movw %%ax,%%gs	   "
 					:
 					: "a" (USEL(SEG_UDATA)));
 

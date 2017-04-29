@@ -88,19 +88,39 @@ __DEVICE_H__	kernel/include/device.h	2;"	d
 SERIAL_PORT	kernel/include/device/serial.h	6;"	d
 __SERIAL_H__	kernel/include/device/serial.h	2;"	d
 DEAD	kernel/include/process.h	/^enum {RUN, SLEEP, WAIT, DEAD};$/;"	e	enum:__anon1
-K_SIZE	kernel/include/process.h	6;"	d
-MAX_PCB	kernel/include/process.h	7;"	d
-PCB	kernel/include/process.h	/^typedef struct PCB{$/;"	s
-PCB	kernel/include/process.h	/^}PCB;$/;"	t	typeref:struct:PCB
+K_SIZE	kernel/include/process.h	3;"	d
+NR_MAX_PCB	kernel/include/process.h	4;"	d
+ProcessTable	kernel/include/process.h	/^struct ProcessTable$/;"	s
 RUN	kernel/include/process.h	/^enum {RUN, SLEEP, WAIT, DEAD};$/;"	e	enum:__anon1
 SLEEP	kernel/include/process.h	/^enum {RUN, SLEEP, WAIT, DEAD};$/;"	e	enum:__anon1
+StackFrame	kernel/include/process.h	/^struct StackFrame$/;"	s
 WAIT	kernel/include/process.h	/^enum {RUN, SLEEP, WAIT, DEAD};$/;"	e	enum:__anon1
-__PROCESS__	kernel/include/process.h	2;"	d
-kstack	kernel/include/process.h	/^	uint8_t kstack[K_SIZE];$/;"	m	struct:PCB
-sleep_time	kernel/include/process.h	/^	uint32_t sleep_time;$/;"	m	struct:PCB
-state	kernel/include/process.h	/^	uint32_t state;$/;"	m	struct:PCB
-tf	kernel/include/process.h	/^	void *tf;$/;"	m	struct:PCB
-time	kernel/include/process.h	/^	uint32_t time;$/;"	m	struct:PCB
+__PROCESS_H__	kernel/include/process.h	2;"	d
+cs	kernel/include/process.h	/^	uint32_t eip,cs,eflags,esp,ss;$/;"	m	struct:StackFrame
+ds	kernel/include/process.h	/^	uint32_t gs,fs,es,ds;$/;"	m	struct:StackFrame
+eax	kernel/include/process.h	/^	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;$/;"	m	struct:StackFrame
+ebp	kernel/include/process.h	/^	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;$/;"	m	struct:StackFrame
+ebx	kernel/include/process.h	/^	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;$/;"	m	struct:StackFrame
+ecx	kernel/include/process.h	/^	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;$/;"	m	struct:StackFrame
+edi	kernel/include/process.h	/^	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;$/;"	m	struct:StackFrame
+edx	kernel/include/process.h	/^	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;$/;"	m	struct:StackFrame
+eflags	kernel/include/process.h	/^	uint32_t eip,cs,eflags,esp,ss;$/;"	m	struct:StackFrame
+eip	kernel/include/process.h	/^	uint32_t eip,cs,eflags,esp,ss;$/;"	m	struct:StackFrame
+error	kernel/include/process.h	/^	uint32_t error;$/;"	m	struct:StackFrame
+es	kernel/include/process.h	/^	uint32_t gs,fs,es,ds;$/;"	m	struct:StackFrame
+esi	kernel/include/process.h	/^	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;$/;"	m	struct:StackFrame
+esp	kernel/include/process.h	/^	uint32_t eip,cs,eflags,esp,ss;$/;"	m	struct:StackFrame
+fs	kernel/include/process.h	/^	uint32_t gs,fs,es,ds;$/;"	m	struct:StackFrame
+gs	kernel/include/process.h	/^	uint32_t gs,fs,es,ds;$/;"	m	struct:StackFrame
+irq	kernel/include/process.h	/^	int32_t irq;$/;"	m	struct:StackFrame
+pid	kernel/include/process.h	/^	uint32_t pid;$/;"	m	struct:ProcessTable
+sleepTime	kernel/include/process.h	/^	int sleepTime;$/;"	m	struct:ProcessTable
+ss	kernel/include/process.h	/^	uint32_t eip,cs,eflags,esp,ss;$/;"	m	struct:StackFrame
+stack	kernel/include/process.h	/^	uint32_t stack[MAX_STACK_SIZE]; \/\/ 内 核 堆 栈$/;"	m	struct:ProcessTable
+stackframe	kernel/include/process.h	/^	struct StackFrame stackframe;$/;"	m	struct:ProcessTable	typeref:struct:ProcessTable::StackFrame
+state	kernel/include/process.h	/^	int state;$/;"	m	struct:ProcessTable
+timeCount	kernel/include/process.h	/^	int timeCount;$/;"	m	struct:ProcessTable
+xxx	kernel/include/process.h	/^	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;$/;"	m	struct:StackFrame
 SYS__llseek	kernel/include/sysnum.h	432;"	d
 SYS__newselect	kernel/include/sysnum.h	438;"	d
 SYS__sysctl	kernel/include/sysnum.h	459;"	d
@@ -1322,6 +1342,9 @@ readSect	kernel/kernel/kvm.c	/^void readSect(void *dst, int offset) {$/;"	f
 readseg	kernel/kernel/kvm.c	/^void readseg(char *address, int count, int offset) $/;"	f
 tss	kernel/kernel/kvm.c	/^TSS tss;$/;"	v
 waitDisk	kernel/kernel/kvm.c	/^void waitDisk(void) {$/;"	f
+current	kernel/kernel/process.c	/^ProcessTable * current;$/;"	v
+pcb_tb	kernel/kernel/process.c	/^ProcessTable pcb_tb[NR_MAX_PCB];$/;"	v
+schedule	kernel/kernel/process.c	/^void schedule(){$/;"	f
 initSerial	kernel/kernel/serial.c	/^void initSerial(void) {$/;"	f
 putChar	kernel/kernel/serial.c	/^void putChar(char ch) {$/;"	f
 serialIdle	kernel/kernel/serial.c	/^static inline int serialIdle(void) {$/;"	f	file:
