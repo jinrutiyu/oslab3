@@ -5,13 +5,15 @@
 #define NR_MAX_PCB 2
 
 #include "common.h"
+#include "x86/memory.h"
 
-enum {RUN, SLEEP, WAIT, DEAD};
+typedef enum {RUN, SLEEP, WAIT, DEAD}State;
 
 typedef struct StackFrame
 {
-	uint32_t gs,fs,es,ds;
+	uint32_t arg;
 	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;
+	uint32_t gs,fs,es,ds;
 	int32_t irq;
 	uint32_t error;
 	uint32_t eip,cs,eflags,esp,ss;
@@ -25,8 +27,10 @@ typedef struct ProcessTable
 	int timeCount;
 	int sleepTime;
 	uint32_t pid;
+	SegDesc code_seg;
+	SegDesc data_seg;
 }ProcessTable;
 
-
+extern void initProcess();
 extern void schedule();
 #endif

@@ -33,14 +33,30 @@ irqSyscall:
 	pushl $0x80 // push interrupt vector into kernel stack
 	jmp asmDoIrq
 
+# .global __ptr
+
 .global asmDoIrq
 asmDoIrq:
 	cli
+	pushl %ds
+	pushl %es
+	pushl %fs
+	pushl %gs
 	pushal // push process state into kernel stack
 	pushl %esp
 	call irqHandle
+
+	movl __ptr,%eax
+	movl %eax,%esp
+
 	addl $4, %esp
 	popal
+
+	popl %gs
+	popl %fs
+	popl %es
+	popl %ds
+
 	addl $4, %esp //interrupt vector is on top of kernel stack
 	addl $4, %esp //error code is on top of kernel stack
 	sti

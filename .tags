@@ -23,7 +23,7 @@ ELFHeader	bootloader/boot.h	/^typedef struct ELFHeader ELFHeader;$/;"	t	typeref:
 ELFHeader	kernel/include/x86/io.h	/^struct ELFHeader {$/;"	s
 ELFHeader	kernel/include/x86/io.h	/^typedef struct ELFHeader ELFHeader;$/;"	t	typeref:struct:ELFHeader
 ELF_START_POS	bootloader/boot.c	6;"	d	file:
-ELF_START_POS	kernel/kernel/kvm.c	8;"	d	file:
+ELF_START_POS	kernel/kernel/kvm.c	11;"	d	file:
 FALSE	kernel/include/common/const.h	5;"	d
 FREQ_8253	kernel/kernel/i8259.c	36;"	d	file:
 GDT_ENTRY	bootloader/start.S	/^#define GDT_ENTRY(n) ((n) << 3)$/;"	d
@@ -36,21 +36,22 @@ KCFILES	kernel/Makefile	/^KCFILES = $(shell find .\/ -name "*.c")$/;"	m
 KOBJS	kernel/Makefile	/^KOBJS = $(KCFILES:.c=.o) $(KSFILES:.S=.o)$/;"	m
 KSEL	kernel/include/x86/memory.h	26;"	d
 KSFILES	kernel/Makefile	/^KSFILES = $(shell find .\/ -name "*.S")$/;"	m
-K_SIZE	kernel/include/process.h	3;"	d
 LCFILES	app/Makefile	/^LCFILES = $(shell find ..\/lib -name "*.c")$/;"	m
 LD	app/Makefile	/^LD = ld$/;"	m
 LD	kernel/Makefile	/^LD = ld$/;"	m
 LDFLAGS	app/Makefile	/^LDFLAGS = -m elf_i386$/;"	m
 LDFLAGS	kernel/Makefile	/^LDFLAGS = -m elf_i386$/;"	m
 Log	kernel/kernel/debug.c	/^void Log(char *format,...){$/;"	f
+MAX_STACK_SIZE	kernel/include/process.h	4;"	d
 NR_IRQ	kernel/include/x86/cpu.h	30;"	d
-NR_MAX_PCB	kernel/include/process.h	4;"	d
+NR_MAX_PCB	kernel/include/process.h	5;"	d
 NR_SEGMENTS	kernel/include/x86/memory.h	18;"	d
 NULL	bootloader/boot.c	3;"	d	file:
 NULL	kernel/include/common/const.h	7;"	d
 PORT_PIC_MASTER	kernel/kernel/i8259.c	3;"	d	file:
 PORT_PIC_SLAVE	kernel/kernel/i8259.c	4;"	d	file:
-ProcessTable	kernel/include/process.h	/^struct ProcessTable$/;"	s
+ProcessTable	kernel/include/process.h	/^typedef struct ProcessTable$/;"	s
+ProcessTable	kernel/include/process.h	/^}ProcessTable;$/;"	t	typeref:struct:ProcessTable
 ProgramHeader	bootloader/boot.h	/^struct ProgramHeader {$/;"	s
 ProgramHeader	bootloader/boot.h	/^typedef struct ProgramHeader ProgramHeader;$/;"	t	typeref:struct:ProgramHeader
 ProgramHeader	kernel/include/x86/io.h	/^struct ProgramHeader {$/;"	s
@@ -58,7 +59,7 @@ ProgramHeader	kernel/include/x86/io.h	/^typedef struct ProgramHeader ProgramHead
 QEMU	Makefile	/^QEMU = qemu-system-i386$/;"	m
 RUN	kernel/include/process.h	/^enum {RUN, SLEEP, WAIT, DEAD};$/;"	e	enum:__anon1
 SECTSIZE	bootloader/boot.c	5;"	d	file:
-SECTSIZE	kernel/kernel/kvm.c	7;"	d	file:
+SECTSIZE	kernel/kernel/kvm.c	10;"	d	file:
 SEG	kernel/include/x86/memory.h	68;"	d
 SEG16	kernel/include/x86/memory.h	73;"	d
 SEG_KCODE	kernel/include/x86/memory.h	19;"	d
@@ -427,7 +428,8 @@ SYS_write	kernel/include/sysnum.h	24;"	d
 SYS_writev	kernel/include/sysnum.h	450;"	d
 SegDesc	kernel/include/x86/memory.h	/^struct SegDesc {$/;"	s
 SegDesc	kernel/include/x86/memory.h	/^typedef struct SegDesc SegDesc;$/;"	t	typeref:struct:SegDesc
-StackFrame	kernel/include/process.h	/^struct StackFrame$/;"	s
+StackFrame	kernel/include/process.h	/^typedef struct StackFrame$/;"	s
+StackFrame	kernel/include/process.h	/^}StackFrame;$/;"	t	typeref:struct:StackFrame
 TIMER_PORT	kernel/kernel/i8259.c	35;"	d	file:
 TRAP_GATE_32	kernel/kernel/idt.c	5;"	d	file:
 TRUE	kernel/include/common/const.h	4;"	d
@@ -1177,15 +1179,18 @@ boolean	lib/types.h	/^typedef unsigned char  boolean;$/;"	t
 bootMain	bootloader/boot.c	/^void bootMain(void) {$/;"	f
 buff	kernel/kernel/debug.c	/^static char buff[BLOCK_SIZE];$/;"	v	file:
 buff	lib/syscall.c	/^static char buff[BLOCK_SIZE];$/;"	v	file:
+code_seg	kernel/include/process.h	/^	SegDesc code_seg;$/;"	m	struct:ProcessTable
 col	kernel/kernel/irqHandle.c	/^static int col=0;$/;"	v	file:
 cr3	kernel/include/x86/memory.h	/^			uint32_t cr3, eip, eflags, eax, ecx, edx, ebx, esp, ebp, esi, edi;$/;"	m	struct:TSS::__anon2::__anon4
 cs	kernel/include/process.h	/^	uint32_t eip,cs,eflags,esp,ss;$/;"	m	struct:StackFrame
 cs	kernel/include/x86/memory.h	/^			uint32_t es, cs, ss, ds, fs, gs, ldt;$/;"	m	struct:TSS::__anon2::__anon4
 current	kernel/kernel/process.c	/^ProcessTable * current;$/;"	v
 data	app/main.c	/^int data = 0;$/;"	v
+data_seg	kernel/include/process.h	/^	SegDesc data_seg;$/;"	m	struct:ProcessTable
 db	kernel/include/x86/memory.h	/^	uint32_t db : 1;         \/\/ 0 = 16-bit segment, 1 = 32-bit segment$/;"	m	struct:SegDesc
 disableInterrupt	kernel/include/x86/cpu.h	/^static inline void disableInterrupt(void) {$/;"	f
 displayMessage	kernel/lib/abort.c	/^static void displayMessage(const char *file, int line) {$/;"	f	file:
+do_sys_write	kernel/kernel/irqHandle.c	/^void do_sys_write(struct TrapFrame *tf)$/;"	f
 dontcare	kernel/include/x86/memory.h	/^			char dontcare[88];$/;"	m	struct:TSS::__anon2::__anon3
 dpl	kernel/include/x86/memory.h	/^	uint32_t dpl : 2;        \/\/ Descriptor Privilege Level$/;"	m	struct:SegDesc
 ds	kernel/include/process.h	/^	uint32_t gs,fs,es,ds;$/;"	m	struct:StackFrame
@@ -1248,6 +1253,7 @@ gdtDesc	bootloader/start.S	/^gdtDesc:$/;"	l
 gs	kernel/include/process.h	/^	uint32_t gs,fs,es,ds;$/;"	m	struct:StackFrame
 gs	kernel/include/x86/memory.h	/^			uint32_t es, cs, ss, ds, fs, gs, ldt;$/;"	m	struct:TSS::__anon2::__anon4
 i2A	kernel/lib/abort.c	/^static char *i2A(int a) {$/;"	f	file:
+idle	kernel/kernel/process.c	/^ProcessTable idle;$/;"	v
 idt	kernel/kernel/idt.c	/^struct GateDescriptor idt[NR_IRQ]; \/\/ NR_IRQ=256, defined in x86\/cpu.h$/;"	v	typeref:struct:GateDescriptor
 inByte	bootloader/boot.h	/^static inline char inByte(short port) {$/;"	f
 inByte	kernel/include/x86/io.h	/^static inline uint8_t inByte(uint16_t port) {$/;"	f
@@ -1255,6 +1261,7 @@ inLong	bootloader/boot.h	/^static inline int inLong(short port) {$/;"	f
 inLong	kernel/include/x86/io.h	/^static inline int inLong(short port) {$/;"	f
 initIdt	kernel/kernel/idt.c	/^void initIdt() {$/;"	f
 initIntr	kernel/kernel/i8259.c	/^initIntr(void) {$/;"	f
+initProcess	kernel/kernel/process.c	/^void initProcess()$/;"	f
 initSeg	kernel/kernel/kvm.c	/^void initSeg() {$/;"	f
 initSerial	kernel/kernel/serial.c	/^void initSerial(void) {$/;"	f
 initTimer	kernel/kernel/i8259.c	/^void initTimer() {$/;"	f
@@ -1279,7 +1286,7 @@ line	kernel/kernel/irqHandle.c	/^static int line=5;$/;"	v	file:
 link	kernel/include/x86/memory.h	/^	uint32_t link;         \/\/ old ts selector$/;"	m	struct:TSS
 loadUMain	kernel/kernel/kvm.c	/^void loadUMain(void) {$/;"	f
 loader	bootloader/boot.c	/^uint32_t loader(char *buf)$/;"	f
-loader	kernel/kernel/kvm.c	/^uint32_t loader(char *buf)$/;"	f
+loader	kernel/kernel/kvm.c	/^uint32_t loader(char *buf,int segoffset)$/;"	f
 machine	bootloader/boot.h	/^	unsigned short machine;$/;"	m	struct:ELFHeader
 machine	kernel/include/x86/io.h	/^	unsigned short machine;$/;"	m	struct:ELFHeader
 magic	bootloader/boot.h	/^	unsigned int   magic;$/;"	m	struct:ELFHeader
@@ -1296,7 +1303,7 @@ p	kernel/include/x86/memory.h	/^	uint32_t p : 1;          \/\/ Present$/;"	m	str
 pad0	kernel/include/x86/memory.h	/^	uint32_t pad0             : 8;$/;"	m	struct:GateDescriptor
 paddr	bootloader/boot.h	/^	unsigned int paddr;$/;"	m	struct:ProgramHeader
 paddr	kernel/include/x86/io.h	/^	unsigned int paddr;$/;"	m	struct:ProgramHeader
-pattern	kernel/kernel/irqHandle.c	9;"	d	file:
+pattern	kernel/kernel/irqHandle.c	10;"	d	file:
 pcb_tb	kernel/kernel/process.c	/^ProcessTable pcb_tb[NR_MAX_PCB];$/;"	v
 phentsize	bootloader/boot.h	/^	unsigned short phentsize;$/;"	m	struct:ELFHeader
 phentsize	kernel/include/x86/io.h	/^	unsigned short phentsize;$/;"	m	struct:ELFHeader
@@ -1319,7 +1326,7 @@ readseg	kernel/kernel/kvm.c	/^void readseg(char *address, int count, int offset)
 rsv1	kernel/include/x86/memory.h	/^	uint32_t rsv1 : 1;       \/\/ Reserved$/;"	m	struct:SegDesc
 s	kernel/include/x86/memory.h	/^	uint32_t s : 1;          \/\/ 0 = system, 1 = application$/;"	m	struct:SegDesc
 saveIdt	kernel/include/x86/cpu.h	/^static inline void saveIdt(void *addr, uint32_t size) {$/;"	f
-schedule	kernel/kernel/process.c	/^void schedule(){$/;"	f
+schedule	kernel/kernel/process.c	/^void schedule()$/;"	f
 segment	kernel/include/x86/memory.h	/^	uint32_t segment          : 16;$/;"	m	struct:GateDescriptor
 serialIdle	kernel/kernel/serial.c	/^static inline int serialIdle(void) {$/;"	f	file:
 setGdt	kernel/include/x86/memory.h	/^static inline void setGdt(SegDesc *gdt, uint32_t size) {$/;"	f
@@ -1352,6 +1359,7 @@ syscall	lib/syscall.c	/^int32_t syscall(int num, uint32_t a1,uint32_t a2,$/;"	f
 syscallHandle	kernel/kernel/irqHandle.c	/^void syscallHandle(struct TrapFrame *tf) {$/;"	f
 system	kernel/include/x86/memory.h	/^	uint32_t system           : 1;$/;"	m	struct:GateDescriptor
 timeCount	kernel/include/process.h	/^	int timeCount;$/;"	m	struct:ProcessTable
+timerHandle	kernel/kernel/irqHandle.c	/^void timerHandle()$/;"	f
 tss	kernel/kernel/kvm.c	/^TSS tss;$/;"	v
 type	bootloader/boot.h	/^	unsigned int type;$/;"	m	struct:ProgramHeader
 type	bootloader/boot.h	/^	unsigned short type;$/;"	m	struct:ELFHeader

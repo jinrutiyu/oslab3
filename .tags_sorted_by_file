@@ -88,15 +88,19 @@ __DEVICE_H__	kernel/include/device.h	2;"	d
 SERIAL_PORT	kernel/include/device/serial.h	6;"	d
 __SERIAL_H__	kernel/include/device/serial.h	2;"	d
 DEAD	kernel/include/process.h	/^enum {RUN, SLEEP, WAIT, DEAD};$/;"	e	enum:__anon1
-K_SIZE	kernel/include/process.h	3;"	d
-NR_MAX_PCB	kernel/include/process.h	4;"	d
-ProcessTable	kernel/include/process.h	/^struct ProcessTable$/;"	s
+MAX_STACK_SIZE	kernel/include/process.h	4;"	d
+NR_MAX_PCB	kernel/include/process.h	5;"	d
+ProcessTable	kernel/include/process.h	/^typedef struct ProcessTable$/;"	s
+ProcessTable	kernel/include/process.h	/^}ProcessTable;$/;"	t	typeref:struct:ProcessTable
 RUN	kernel/include/process.h	/^enum {RUN, SLEEP, WAIT, DEAD};$/;"	e	enum:__anon1
 SLEEP	kernel/include/process.h	/^enum {RUN, SLEEP, WAIT, DEAD};$/;"	e	enum:__anon1
-StackFrame	kernel/include/process.h	/^struct StackFrame$/;"	s
+StackFrame	kernel/include/process.h	/^typedef struct StackFrame$/;"	s
+StackFrame	kernel/include/process.h	/^}StackFrame;$/;"	t	typeref:struct:StackFrame
 WAIT	kernel/include/process.h	/^enum {RUN, SLEEP, WAIT, DEAD};$/;"	e	enum:__anon1
 __PROCESS_H__	kernel/include/process.h	2;"	d
+code_seg	kernel/include/process.h	/^	SegDesc code_seg;$/;"	m	struct:ProcessTable
 cs	kernel/include/process.h	/^	uint32_t eip,cs,eflags,esp,ss;$/;"	m	struct:StackFrame
+data_seg	kernel/include/process.h	/^	SegDesc data_seg;$/;"	m	struct:ProcessTable
 ds	kernel/include/process.h	/^	uint32_t gs,fs,es,ds;$/;"	m	struct:StackFrame
 eax	kernel/include/process.h	/^	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;$/;"	m	struct:StackFrame
 ebp	kernel/include/process.h	/^	uint32_t edi, esi, ebp, xxx, ebx, edx, ecx, eax;$/;"	m	struct:StackFrame
@@ -1326,25 +1330,29 @@ setIntr	kernel/kernel/idt.c	/^static void setIntr(struct GateDescriptor *ptr, ui
 setTrap	kernel/kernel/idt.c	/^static void setTrap(struct GateDescriptor *ptr, uint32_t selector, uint32_t offset, uint32_t dpl) {$/;"	f	file:
 GProtectFaultHandle	kernel/kernel/irqHandle.c	/^void GProtectFaultHandle(struct TrapFrame *tf){$/;"	f
 col	kernel/kernel/irqHandle.c	/^static int col=0;$/;"	v	file:
+do_sys_write	kernel/kernel/irqHandle.c	/^void do_sys_write(struct TrapFrame *tf)$/;"	f
 irqHandle	kernel/kernel/irqHandle.c	/^void irqHandle(struct TrapFrame *tf) {$/;"	f
 line	kernel/kernel/irqHandle.c	/^static int line=5;$/;"	v	file:
-pattern	kernel/kernel/irqHandle.c	9;"	d	file:
+pattern	kernel/kernel/irqHandle.c	10;"	d	file:
 showCharInScreen	kernel/kernel/irqHandle.c	/^void showCharInScreen(char ch){$/;"	f
 syscallHandle	kernel/kernel/irqHandle.c	/^void syscallHandle(struct TrapFrame *tf) {$/;"	f
-ELF_START_POS	kernel/kernel/kvm.c	8;"	d	file:
-SECTSIZE	kernel/kernel/kvm.c	7;"	d	file:
+timerHandle	kernel/kernel/irqHandle.c	/^void timerHandle()$/;"	f
+ELF_START_POS	kernel/kernel/kvm.c	11;"	d	file:
+SECTSIZE	kernel/kernel/kvm.c	10;"	d	file:
 enterUserSpace	kernel/kernel/kvm.c	/^void enterUserSpace(uint32_t entry) {$/;"	f
 gdt	kernel/kernel/kvm.c	/^SegDesc gdt[NR_SEGMENTS];$/;"	v
 initSeg	kernel/kernel/kvm.c	/^void initSeg() {$/;"	f
 loadUMain	kernel/kernel/kvm.c	/^void loadUMain(void) {$/;"	f
-loader	kernel/kernel/kvm.c	/^uint32_t loader(char *buf)$/;"	f
+loader	kernel/kernel/kvm.c	/^uint32_t loader(char *buf,int segoffset)$/;"	f
 readSect	kernel/kernel/kvm.c	/^void readSect(void *dst, int offset) {$/;"	f
 readseg	kernel/kernel/kvm.c	/^void readseg(char *address, int count, int offset) $/;"	f
 tss	kernel/kernel/kvm.c	/^TSS tss;$/;"	v
 waitDisk	kernel/kernel/kvm.c	/^void waitDisk(void) {$/;"	f
 current	kernel/kernel/process.c	/^ProcessTable * current;$/;"	v
+idle	kernel/kernel/process.c	/^ProcessTable idle;$/;"	v
+initProcess	kernel/kernel/process.c	/^void initProcess()$/;"	f
 pcb_tb	kernel/kernel/process.c	/^ProcessTable pcb_tb[NR_MAX_PCB];$/;"	v
-schedule	kernel/kernel/process.c	/^void schedule(){$/;"	f
+schedule	kernel/kernel/process.c	/^void schedule()$/;"	f
 initSerial	kernel/kernel/serial.c	/^void initSerial(void) {$/;"	f
 putChar	kernel/kernel/serial.c	/^void putChar(char ch) {$/;"	f
 serialIdle	kernel/kernel/serial.c	/^static inline int serialIdle(void) {$/;"	f	file:

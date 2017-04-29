@@ -1,4 +1,4 @@
-#define BLOCK_SIZE 100
+#define BLOCK_SIZE 200
 #include <stdarg.h>
 extern void putChar(char ch);
 
@@ -113,7 +113,5 @@ void Log(char *format,...){
 	{
 		putChar(buff[i]);
 	}
-
-	putChar('\n');
 	ptr=0;
 }

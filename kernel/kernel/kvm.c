@@ -10,7 +10,7 @@ TSS tss;
 #define SECTSIZE 512
 #define ELF_START_POS (201*SECTSIZE)
 
-uint32_t loader(char *buf);
+uint32_t loader(char *buf,int offset);
 void readseg(char *address, int count, int offset);
 void init_segment(void);
 
@@ -51,9 +51,7 @@ void initSeg() {
 
 	/*设置正确的段寄存器*/
 	tss.ss0=KSEL(SEG_KDATA);
-	// tss.esp0=0x200000;
 	tss.esp0=(uint32_t)((char *)&idle.state);
-
 	asm volatile(	"movw %%ax,%%es\n\t"
 					"movw %%ax,%%ds\n\t"
 					"movw %%ax,%%gs\n\t"
@@ -101,7 +99,7 @@ void loadUMain(void) {
 	char *buf=(char *)0x8000;
 	/*read elf from disk*/
 	readseg((char*)buf, SECTSIZE, ELF_START_POS);
-	uint32_t entry=loader(buf);
+	uint32_t entry=loader(buf,0);
 	enterUserSpace(entry);
 }
 
@@ -118,7 +116,7 @@ void readseg(char *address, int count, int offset)
 	}
 }
 
-uint32_t loader(char *buf)
+uint32_t loader(char *buf,int segoffset)
 {
 	ELFHeader *elf=(void *)buf;
 	ProgramHeader *ph = NULL;
@@ -133,7 +131,7 @@ uint32_t loader(char *buf)
 		if(ph->type == 1) /*PT_LOAD*/
 		{
 			uint32_t Offset=ph->off;
-			uint32_t VirtAddr =ph->vaddr;//This is now physical addr.But should be VA
+			uint32_t VirtAddr =ph->vaddr+segoffset;//This is now physical addr.But should be VA
 			int FileSiz=ph->filesz;
 			int MemSize=ph->memsz;
 			readseg((void*)(VirtAddr),FileSiz,ELF_START_POS+Offset);

@@ -5,6 +5,7 @@ os.img:
 	@cd kernel; make
 	@cd app; make
 	objdump -d kernel/kMain.elf > kernel/kernel.asm
+	objdump -d app/uMain.elf 	> app/uMain.asm
 	cat bootloader/bootloader.bin kernel/kMain.elf app/uMain.elf > os.img
 
 play:clean os.img 

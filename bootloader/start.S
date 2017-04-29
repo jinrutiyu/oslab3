@@ -26,7 +26,7 @@ start32:
                 movw    %ax,%gs
 #初始化栈顶指针ESP
 	movl $0, %ebp
-	movl $0x8000, %esp#初始化DS ES FS GS SS 初始化栈顶指针ESP
+	movl $0x200000, %esp#初始化DS ES FS GS SS 初始化栈顶指针ESP
     jmp bootMain                    #跳转至bootMain函数 定义于boot.c
 
 gdt:
