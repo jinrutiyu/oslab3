@@ -15,7 +15,7 @@
 .globl no12;   no12:             pushl   $12; jmp asmDoIrq
 .globl no13;   no13:             pushl   $13; jmp asmDoIrq
 .globl no14;   no14:             pushl   $14; jmp asmDoIrq
-.globl intr0; intr0: 			 pushl $1000; jmp asmDoIrq
+.globl intr0; intr0:  pushl $0;	 pushl $1000; jmp asmDoIrq
 
 
 
@@ -35,6 +35,7 @@ irqSyscall:
 
 .global asmDoIrq
 asmDoIrq:
+	cli
 	pushal // push process state into kernel stack
 	pushl %esp
 	call irqHandle
@@ -42,4 +43,5 @@ asmDoIrq:
 	popal
 	addl $4, %esp //interrupt vector is on top of kernel stack
 	addl $4, %esp //error code is on top of kernel stack
+	sti
 	iret

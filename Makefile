@@ -4,9 +4,10 @@ os.img:
 	@cd bootloader; make
 	@cd kernel; make
 	@cd app; make
+	objdump -d kernel/kMain.elf > kernel/kernel.asm
 	cat bootloader/bootloader.bin kernel/kMain.elf app/uMain.elf > os.img
 
-play: os.img
+play:clean os.img 
 	$(QEMU) -serial stdio os.img
 
 debug: os.img

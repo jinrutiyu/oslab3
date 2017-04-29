@@ -52,6 +52,7 @@ void initSeg() {
 
 	asm volatile(	"movw %%ax,%%es\n\t"
 					"movw %%ax,%%ds\n\t"
+					"movw %%ax,%%gs\n\t"
 					"movw %%ax,%%fs\n\t"
 					"movw %%ax,%%ss    "
 					:
@@ -65,23 +66,25 @@ void enterUserSpace(uint32_t entry) {
 	 * you should set the right segment registers here
 	 * and use 'iret' to jump to ring3
 	 */
-	asm volatile(	"movw %%ax,%%es\n\t"
+	asm volatile(	"cli		   \n\t"
+					"movw %%ax,%%es\n\t"
 					"movw %%ax,%%fs\n\t"
 					"movw %%ax,%%ds    "
 					:
-					: "a" ((SEG_UDATA<<3)|3));
+					: "a" (USEL(SEG_UDATA)));
 
 
-	asm volatile("pushw %0		\n\t"
-				 "pushl %1		\n\t"
-				 "pushfl		\n\t"
-				 "pushl %2		\n\t"
-				 "pushl %3		    "
+	asm volatile("pushw %0		\n\t"//SS
+				 "pushl %1		\n\t"//ESP
+				 "push  %2		\n\t"//EFLAGS
+				 "pushl %3		\n\t"//CS
+				 "pushl %4		\n\t"//EIP
+				 "sti				"
 				 :
-				 :"i"((SEG_UDATA<<3)|3),
+				 :"i"(USEL(SEG_UDATA)),
 				  "i"(0x400000), 			//the user stack top
-				 					 		//at first I use 0xc0000000 and bad
-				  "i"((SEG_UCODE<<3)|3),
+				  "i"(0x202),		 		//at first I use 0xc0000000 and bad
+				  "i"(USEL(SEG_UCODE)),
 				  "m"(entry)
 				 );
 	asm volatile("iret");

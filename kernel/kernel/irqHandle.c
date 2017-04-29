@@ -39,12 +39,16 @@ void irqHandle(struct TrapFrame *tf) {
 	 * 中断处理程序
 	 */
 	/* Reassign segment register */
-
+	asm volatile("pushl %ds		\n\t"
+				 "pushl %es		\n\t"
+				 "pushl %fs		\n\t"
+				 "pushl %gs			");
 	asm volatile("movw %%ax,%%es\n\t"
 				 "movw %%ax,%%ds\n\t"
 				 "movw %%ax,%%fs"
 				 :
 				 : "a" (KSEL(SEG_KDATA)));
+	// Log("irq::%d",tf->irq);
 	switch(tf->irq) {
 		case -1:
 			break;
@@ -61,13 +65,13 @@ void irqHandle(struct TrapFrame *tf) {
 			// 	schedule();
 			// }
 			break;
-		default:Log("%d",tf->irq);assert(0);
+		default:Log("%d",tf->irq);//assert(0);
 	}
-	asm volatile("movw %%ax,%%es\n\t"
-				 "movw %%ax,%%ds\n\t"
-				 "movw %%ax,%%fs"
-				 :
-				 : "a" (KSEL(SEG_UDATA)));
+	asm volatile("popl %gs		\n\t"
+				 "popl %fs		\n\t"
+				 "popl %es		\n\t"
+				 "popl %ds			");
+
 }
 
 
