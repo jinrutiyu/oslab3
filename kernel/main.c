@@ -5,6 +5,13 @@
 
 extern ProcessTable idle;
 
+void idle_fun()
+{
+	while(1)
+    {
+    	asm volatile("hlt");
+   	}
+}
 
 void kEntry(void) {
 	initSerial();// initialize serial port
@@ -15,9 +22,12 @@ void kEntry(void) {
 	initProcess();
 	
 // loadUMain(); // load user program, enter user space
-	while(1)
-    {
-    	asm volatile("hlt");
-   	}
+// 
+	asm volatile ("movl %0,%%esp"
+					:
+					:"r"((uint32_t)(&idle.state-2)));
+	asm volatile ("sti");
+	idle_fun();
 	assert(0);
 }
+

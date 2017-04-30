@@ -42,7 +42,9 @@ void GProtectFaultHandle(struct TrapFrame *tf);
 void timerHandle()
 {
 	if(current==&idle)
+	{
 		putChar('.');
+	}	
 	else if(current==&pcb_tb[0])
 		putChar('1');
 	else if(current==&pcb_tb[1])
@@ -98,8 +100,16 @@ void irqHandle(struct TrapFrame *tf) {
 		case 1000://Timer
 			Log("time 1000\n");
 			timerHandle();
-			//change the esp to the Process temp's PCB
-			__ptr=(uint32_t)&current->stackframe;
+
+			if(current==&idle)
+			{
+				__ptr=0;
+			}
+			else
+			{
+				//change the esp to the Process temp's PCB
+				__ptr=(uint32_t)&current->stackframe;
+			}			
 			Log("__ptr=%x",__ptr);
 			break;
 		default:Log("\nirq::%d\n",tf->irq);assert(0);

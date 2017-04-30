@@ -71,4 +71,5 @@ void schedule()
 		}
 	}
 	current=&idle;
+	current->timeCount=10;
 }

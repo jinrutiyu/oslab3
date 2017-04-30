@@ -47,8 +47,12 @@ asmDoIrq:
 	call irqHandle
 
 	movl __ptr,%eax
+	test %eax,%eax
+	jz switch
 	movl %eax,%esp
 
+.globl switch
+switch:
 	addl $4, %esp
 	popal
 
