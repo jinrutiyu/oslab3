@@ -42,8 +42,6 @@ void initProcess()
 	readseg((char*)buf, SECTSIZE, ELF_START_POS);
 	pcb_tb[0].stackframe.eip=loader(buf,0x300000);
 	pcb_tb[0].state=WAIT;
-			Log("cs=%x\n",pcb_tb[0].stackframe.cs);
-			Log("eip=%x\n",pcb_tb[0].stackframe.eip);
 	current=&idle;
 }
 
@@ -60,9 +58,9 @@ void schedule()
 			
 			tss.esp0=(uint32_t)((char *)&current->state);
 			
-			gdt[SEG_UCODE] = current->code_seg;
-			gdt[SEG_UDATA] = current->data_seg;
-			setGdt(gdt, sizeof(gdt));
+			// gdt[SEG_UCODE] = current->code_seg;
+			// gdt[SEG_UDATA] = current->data_seg;
+			//setGdt(gdt, sizeof(gdt));
 
 			Log("cs=%x\n",pcb_tb[0].stackframe.cs);
 			Log("eip=%x\n",pcb_tb[0].stackframe.eip);
