@@ -1,6 +1,6 @@
 #include "lib.h"
 #include "types.h"
-#include <sys/syscall.h>
+#include "../kernel/include/syscall.h"
 #include <stdarg.h>
 
 /*/*

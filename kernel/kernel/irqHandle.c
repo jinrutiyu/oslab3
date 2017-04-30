@@ -2,7 +2,7 @@
 #include "device.h"
 #include "process.h"
 
-#include <sys/syscall.h>
+#include "syscall.h"
 
 static int line=5;
 static int col=0;

@@ -8,7 +8,7 @@ os.img:
 	objdump -d app/uMain.elf 	> app/uMain.asm
 	cat bootloader/bootloader.bin kernel/kMain.elf app/uMain.elf > os.img
 
-play:clean os.img 
+play:os.img 
 	$(QEMU) -serial stdio os.img
 
 debug: os.img
