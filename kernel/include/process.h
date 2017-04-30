@@ -21,7 +21,7 @@ typedef struct StackFrame
 
 typedef struct ProcessTable
 {
-	uint32_t stack[MAX_STACK_SIZE]; // 内 核 堆 栈
+	char stack[MAX_STACK_SIZE]; // 内 核 堆 栈
 	struct StackFrame stackframe;
 	int state;
 	int timeCount;

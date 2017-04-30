@@ -87,7 +87,7 @@ void irqHandle(struct TrapFrame *tf) {
 				 "movw %%ax,%%gs	"
 				 :
 				 : "a" (KSEL(SEG_KDATA)));
-	Log("irq::%d",tf->irq);
+	// Log("irq::%d",tf->irq);
 	switch(tf->irq) {
 		case -1:
 			break;
@@ -98,7 +98,7 @@ void irqHandle(struct TrapFrame *tf) {
 			syscallHandle(tf);
 			break;
 		case 1000://Timer
-			Log("time 1000\n");
+			// Log("time 1000\n");
 			timerHandle();
 
 			if(current==&idle)
@@ -110,7 +110,7 @@ void irqHandle(struct TrapFrame *tf) {
 				//change the esp to the Process temp's PCB
 				__ptr=(uint32_t)&current->stackframe;
 			}			
-			Log("__ptr=%x",__ptr);
+			// Log("__ptr=%x",__ptr);
 			break;
 		default:Log("\nirq::%d\n",tf->irq);assert(0);
 	}
