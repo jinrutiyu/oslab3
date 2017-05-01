@@ -1,7 +1,7 @@
 #include "x86.h"
 #include "device.h"
 #include "process.h"
-
+#include "x86/memory.h"
 #include "syscall.h"
 
 static int line=5;
@@ -125,7 +125,7 @@ void do_sys_write(struct TrapFrame *tf)
 {
 	if (tf->ebx == 1 || tf->ebx == 2)
 	{
-		char *buf=(void *)tf->ecx;
+		char *buf=(void *)tf->ecx+GET_SEG_BASE(current->data_seg);/*偏移量*/
 		int len=tf->edx;
 		int retlen=0;
 		char ch;

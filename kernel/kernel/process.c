@@ -58,18 +58,18 @@ void schedule()
 			
 			tss.esp0=(uint32_t)((char *)&current->state);
 			
-			// gdt[SEG_UCODE] = current->code_seg;
-			// gdt[SEG_UDATA] = current->data_seg;
-			//setGdt(gdt, sizeof(gdt));
+			gdt[SEG_UCODE] = current->code_seg;
+			gdt[SEG_UDATA] = current->data_seg;
+			setGdt(gdt, sizeof(gdt));
 
-			Log("cs=%x\n",pcb_tb[0].stackframe.cs);
-			Log("eip=%x\n",pcb_tb[0].stackframe.eip);
-			Log("ucode.base.15-0=%x\n",gdt[SEG_UCODE].base_15_0);
-			Log("ucode.base.23-16=%x\n",gdt[SEG_UCODE].base_23_16);
-			Log("ucode.base.32_24=%x\n",gdt[SEG_UCODE].base_31_24);
-			Log("udata.base.15-0=%x\n",gdt[SEG_UDATA].base_15_0);
-			Log("udata.base.23-16=%x\n",gdt[SEG_UDATA].base_23_16);
-			Log("udata.base.32_24=%x\n",gdt[SEG_UDATA].base_31_24);
+			// Log("cs=%x\n",pcb_tb[0].stackframe.cs);
+			// Log("eip=%x\n",pcb_tb[0].stackframe.eip);
+			// Log("ucode.base.15-0=%x\n",gdt[SEG_UCODE].base_15_0);
+			// Log("ucode.base.23-16=%x\n",gdt[SEG_UCODE].base_23_16);
+			// Log("ucode.base.32_24=%x\n",gdt[SEG_UCODE].base_31_24);
+			// Log("udata.base.15-0=%x\n",gdt[SEG_UDATA].base_15_0);
+			// Log("udata.base.23-16=%x\n",gdt[SEG_UDATA].base_23_16);
+			// Log("udata.base.32_24=%x\n",gdt[SEG_UDATA].base_31_24);
 			return;
 		}
 	}

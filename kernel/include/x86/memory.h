@@ -75,6 +75,12 @@ typedef struct SegDesc SegDesc;
 {	(lim) & 0xffff, (uint32_t)(base) & 0xffff,                \
 	((uint32_t)(base) >> 16) & 0xff, type, 0, dpl, 1,         \
 	(uint32_t)(lim) >> 16, 0, 0, 1, 0, (uint32_t)(base) >> 24 }
+
+
+#define GET_SEG_BASE(segdesc)	\
+	(\
+		(segdesc.base_31_24<<24)|(segdesc.base_23_16<<16)|segdesc.base_15_0\
+		)
 	
 // Task state segment format
 struct TSS {
