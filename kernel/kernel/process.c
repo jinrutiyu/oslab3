@@ -14,6 +14,7 @@ extern TSS tss;
 
 extern uint32_t loader(char *buf,int offset);
 extern void readseg(char *address, int count, int offset);
+extern void idle_fun();
 
 void initProcess()
 {
@@ -33,14 +34,14 @@ void initProcess()
 		pcb_tb[i].stackframe.ss=USEL(SEG_UDATA);
 		pcb_tb[i].pid=i+1;
 
-		pcb_tb[i].code_seg=SEG(STA_X | STA_R, (i<<20)+0x300000,       0xffffffff, DPL_USER);
-		pcb_tb[i].data_seg=SEG(STA_W,         (i<<20)+0x300000,       0xffffffff, DPL_USER);
+		pcb_tb[i].code_seg=SEG(STA_X | STA_R, 4*i*(1<<20),       0xffffffff, DPL_USER);
+		pcb_tb[i].data_seg=SEG(STA_W,         4*i*(1<<20),       0xffffffff, DPL_USER);
 	}
 	/*加载用户程序至内存*/
 	char *buf=(char *)0x8000;
 	/*read elf from disk*/
 	readseg((char*)buf, SECTSIZE, ELF_START_POS);
-	pcb_tb[0].stackframe.eip=loader(buf,0x300000);
+	pcb_tb[0].stackframe.eip=loader(buf,0);
 	pcb_tb[0].state=WAIT;
 	current=&idle;
 }
@@ -48,31 +49,54 @@ void initProcess()
 
 void schedule()
 {
-	for (ProcessTable * temp=&pcb_tb[0];temp!=&pcb_tb[NR_MAX_PCB];temp++)
+	Log("SCHEDULE");
+	
+	ProcessTable * toFirstBeScheduled=(current==&pcb_tb[0]?&pcb_tb[1]:&pcb_tb[0]);
+	ProcessTable * toNextBeScheduled=(toFirstBeScheduled==&pcb_tb[0]?&pcb_tb[1]:&pcb_tb[0]);
+	if(WAIT==toFirstBeScheduled->state)
 	{
-		if(WAIT==temp->state)
-		{
-			current            =temp;
-			current->timeCount =10;
-			current->state     =RUN;
-			
-			tss.esp0=(uint32_t)((char *)&current->state);
-			
-			gdt[SEG_UCODE] = current->code_seg;
-			gdt[SEG_UDATA] = current->data_seg;
-			setGdt(gdt, sizeof(gdt));
-
-			// Log("cs=%x\n",pcb_tb[0].stackframe.cs);
-			// Log("eip=%x\n",pcb_tb[0].stackframe.eip);
-			// Log("ucode.base.15-0=%x\n",gdt[SEG_UCODE].base_15_0);
-			// Log("ucode.base.23-16=%x\n",gdt[SEG_UCODE].base_23_16);
-			// Log("ucode.base.32_24=%x\n",gdt[SEG_UCODE].base_31_24);
-			// Log("udata.base.15-0=%x\n",gdt[SEG_UDATA].base_15_0);
-			// Log("udata.base.23-16=%x\n",gdt[SEG_UDATA].base_23_16);
-			// Log("udata.base.32_24=%x\n",gdt[SEG_UDATA].base_31_24);
-			return;
-		}
+		Log("\n%d->%d\n",ProcessTableIndex(current),ProcessTableIndex(toFirstBeScheduled));
+		current            =toFirstBeScheduled;
+		current->timeCount =10;
+		current->state     =RUN;
+		
+		tss.esp0=(uint32_t)((char *)&current->state);
+		
+		gdt[SEG_UCODE] = current->code_seg;
+		gdt[SEG_UDATA] = current->data_seg;
+		setGdt(gdt, sizeof(gdt));
+		return;
 	}
+
+	if(WAIT==toNextBeScheduled->state)
+	{
+		Log("\n%d->%d\n",ProcessTableIndex(current),ProcessTableIndex(toNextBeScheduled));
+
+		current            =toNextBeScheduled;
+		current->timeCount =10;
+		current->state     =RUN;
+		
+		tss.esp0=(uint32_t)((char *)&current->state);
+		
+		gdt[SEG_UCODE] = current->code_seg;
+		gdt[SEG_UDATA] = current->data_seg;
+		setGdt(gdt, sizeof(gdt));
+		return;
+	}
+	Log("\n%d->%d\n",ProcessTableIndex(current),-1);
 	current=&idle;
+	current->state=RUN;
 	current->timeCount=10;
+	idle_fun();
+}
+
+int applyANewPcb()
+{
+	for (int index=0;index<NR_MAX_PCB;index++)
+	{
+		if(DEAD==pcb_tb[index].state)
+			return index;
+	}
+	assert(0);
+	return -1;
 }

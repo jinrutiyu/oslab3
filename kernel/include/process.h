@@ -4,7 +4,7 @@
 #define MAX_STACK_SIZE 4096
 #define NR_MAX_PCB 2
 
-#include "common.h"
+#include "common/types.h"
 #include "x86/memory.h"
 
 typedef enum {RUN, SLEEP, WAIT, DEAD}State;
@@ -33,4 +33,5 @@ typedef struct ProcessTable
 
 extern void initProcess();
 extern void schedule();
+extern int applyANewPcb();
 #endif

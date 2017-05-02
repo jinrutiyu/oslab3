@@ -7,6 +7,7 @@ extern ProcessTable idle;
 
 void idle_fun()
 {
+	asm volatile ("sti");
 	while(1)
     {
     	asm volatile("hlt");
@@ -26,7 +27,6 @@ void kEntry(void) {
 	asm volatile ("movl %0,%%esp"
 					:
 					:"r"((uint32_t)(&idle.state-2)));
-	asm volatile ("sti");
 	idle_fun();
 	assert(0);
 }

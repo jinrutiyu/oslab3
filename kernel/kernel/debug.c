@@ -1,9 +1,18 @@
 #define BLOCK_SIZE 200
 #include <stdarg.h>
+#include "debug.h"
+
+extern ProcessTable idle;
+extern ProcessTable pcb_tb[NR_MAX_PCB];
+extern ProcessTable * current;
+
 extern void putChar(char ch);
 
 static int ptr=0;
 static char buff[BLOCK_SIZE];
+
+
+
 void addString2Buff(char *str)
 {
 	while(*str)
@@ -114,4 +123,15 @@ void Log(char *format,...){
 		putChar(buff[i]);
 	}
 	ptr=0;
+}
+
+
+int ProcessTableIndex(ProcessTable *pcurrent)
+{
+	if(pcurrent==&idle)
+		return -1;
+	else if(pcurrent==&pcb_tb[0])
+		return 0;
+	else
+		return 1;
 }

@@ -5,10 +5,6 @@
 #include "common/types.h"
 #include "common/const.h"
 #include "common/assert.h"
-
-#define DEBUG
-#ifdef DEBUG
-	#include "debug.h"
-#endif
+#include "debug.h"
 
 #endif
