@@ -11,7 +11,7 @@ Disassembly of section .text:
   200004:	53                   	push   %ebx
   200005:	e8 a2 03 00 00       	call   2003ac <fork>
   20000a:	85 c0                	test   %eax,%eax
-  20000c:	75 4a                	jne    200058 <uEntry+0x58>
+  20000c:	75 3e                	jne    20004c <uEntry+0x4c>
   20000e:	c7 05 00 16 20 00 02 	movl   $0x2,0x201600
   200015:	00 00 00 
   200018:	b8 02 00 00 00       	mov    $0x2,%eax
@@ -29,33 +29,33 @@ Disassembly of section .text:
   200043:	83 c4 10             	add    $0x10,%esp
   200046:	85 db                	test   %ebx,%ebx
   200048:	75 da                	jne    200024 <uEntry+0x24>
-  20004a:	e8 41 03 00 00       	call   200390 <exit>
-  20004f:	31 c0                	xor    %eax,%eax
-  200051:	8b 5d fc             	mov    -0x4(%ebp),%ebx
-  200054:	c9                   	leave  
-  200055:	c3                   	ret    
-  200056:	66 90                	xchg   %ax,%ax
-  200058:	40                   	inc    %eax
-  200059:	74 f4                	je     20004f <uEntry+0x4f>
-  20005b:	c7 05 00 16 20 00 01 	movl   $0x1,0x201600
-  200062:	00 00 00 
-  200065:	b8 01 00 00 00       	mov    $0x1,%eax
-  20006a:	bb 08 00 00 00       	mov    $0x8,%ebx
-  20006f:	eb 08                	jmp    200079 <uEntry+0x79>
-  200071:	8d 76 00             	lea    0x0(%esi),%esi
-  200074:	a1 00 16 20 00       	mov    0x201600,%eax
-  200079:	4b                   	dec    %ebx
-  20007a:	52                   	push   %edx
-  20007b:	53                   	push   %ebx
-  20007c:	50                   	push   %eax
-  20007d:	68 e5 03 20 00       	push   $0x2003e5
-  200082:	e8 85 01 00 00       	call   20020c <printf>
-  200087:	c7 04 24 80 00 00 00 	movl   $0x80,(%esp)
-  20008e:	e8 dd 02 00 00       	call   200370 <sleep>
-  200093:	83 c4 10             	add    $0x10,%esp
-  200096:	85 db                	test   %ebx,%ebx
-  200098:	75 da                	jne    200074 <uEntry+0x74>
-  20009a:	eb ae                	jmp    20004a <uEntry+0x4a>
+  20004a:	eb fe                	jmp    20004a <uEntry+0x4a>
+  20004c:	40                   	inc    %eax
+  20004d:	74 44                	je     200093 <uEntry+0x93>
+  20004f:	c7 05 00 16 20 00 01 	movl   $0x1,0x201600
+  200056:	00 00 00 
+  200059:	b8 01 00 00 00       	mov    $0x1,%eax
+  20005e:	bb 08 00 00 00       	mov    $0x8,%ebx
+  200063:	eb 08                	jmp    20006d <uEntry+0x6d>
+  200065:	8d 76 00             	lea    0x0(%esi),%esi
+  200068:	a1 00 16 20 00       	mov    0x201600,%eax
+  20006d:	4b                   	dec    %ebx
+  20006e:	52                   	push   %edx
+  20006f:	53                   	push   %ebx
+  200070:	50                   	push   %eax
+  200071:	68 e5 03 20 00       	push   $0x2003e5
+  200076:	e8 91 01 00 00       	call   20020c <printf>
+  20007b:	c7 04 24 80 00 00 00 	movl   $0x80,(%esp)
+  200082:	e8 e9 02 00 00       	call   200370 <sleep>
+  200087:	83 c4 10             	add    $0x10,%esp
+  20008a:	85 db                	test   %ebx,%ebx
+  20008c:	75 da                	jne    200068 <uEntry+0x68>
+  20008e:	e8 fd 02 00 00       	call   200390 <exit>
+  200093:	31 c0                	xor    %eax,%eax
+  200095:	8b 5d fc             	mov    -0x4(%ebp),%ebx
+  200098:	c9                   	leave  
+  200099:	c3                   	ret    
+  20009a:	66 90                	xchg   %ax,%ax
 
 0020009c <syscall>:
   20009c:	55                   	push   %ebp

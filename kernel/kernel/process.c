@@ -24,6 +24,18 @@ void initProcess()
 {
 	idle.state=RUN;
 	idle.timeCount=5;
+	idle.stackframe.gs=KSEL(SEG_KDATA);
+	idle.stackframe.fs=KSEL(SEG_KDATA);
+	idle.stackframe.es=KSEL(SEG_KDATA);
+	idle.stackframe.ds=KSEL(SEG_KDATA);
+	idle.stackframe.cs=KSEL(SEG_KCODE);
+	idle.stackframe.eflags=0x202;
+	idle.stackframe.esp=0x200000;
+	idle.stackframe.ss=KSEL(SEG_KDATA);
+	idle.stackframe.eip=(uint32_t)idle_fun;
+
+	// idle.code_seg=SEG(STA_X | STA_R, 0,       0xffffffff, DPL_KERN);
+	// idle.data_seg=SEG(STA_W,         0,       0xffffffff, DPL_KERN);
 	for(int i=0;i<NR_MAX_PCB;i++)
 	{
 		pcb_tb[i].state=DEAD;
@@ -53,13 +65,13 @@ void initProcess()
 
 void schedule()
 {
-	Log("S");
+	// Log("S");
 	
 	ProcessTable * toFirstBeScheduled=(current==&pcb_tb[0]?&pcb_tb[1]:&pcb_tb[0]);
 	ProcessTable * toNextBeScheduled=(toFirstBeScheduled==&pcb_tb[0]?&pcb_tb[1]:&pcb_tb[0]);
 	if(WAIT==toFirstBeScheduled->state)
 	{
-		#ifdef SHOWPROCESSCHANGE
+		#ifdef SHOW_PROCESS_CHANGE
 			Log("\n%d->%d\n",ProcessTableIndex(current),ProcessTableIndex(toFirstBeScheduled));
 		#endif
 		current            =toFirstBeScheduled;
@@ -79,7 +91,7 @@ void schedule()
 
 	if(WAIT==toNextBeScheduled->state)
 	{
-		#ifdef SHOWPROCESSCHANGE
+		#ifdef SHOW_PROCESS_CHANGE
 			Log("\n%d->%d\n",ProcessTableIndex(current),ProcessTableIndex(toNextBeScheduled));
 		#endif
 
@@ -98,7 +110,7 @@ void schedule()
 		return;
 	}
 
-	#ifdef SHOWPROCESSCHANGE
+	#ifdef SHOW_PROCESS_CHANGE
 		Log("\n%d->%d\n",ProcessTableIndex(current),-1);
 	#endif
 

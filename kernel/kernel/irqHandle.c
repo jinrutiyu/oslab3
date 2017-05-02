@@ -51,10 +51,10 @@ void irqHandle(struct TrapFrame *tf) {
 			break;
 		case 1000:
 			timerHandle();
-			if(current==&idle)
-				__ptr=0;
-			else				//change the esp to the Process temp's PCB
-				__ptr=(uint32_t)&current->stackframe;		
+			// if(current==&idle)
+			// 	__ptr=0;
+			// else				//change the esp to the Process temp's PCB
+			// 	__ptr=(uint32_t)&current->stackframe;		
 			// Log("__ptr=%x",__ptr);
 			break;
 		default:Log("\nirq::%d\n",tf->irq);assert(0);

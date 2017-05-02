@@ -7,6 +7,9 @@ extern ProcessTable idle;
 
 void idle_fun()
 {
+	asm volatile("movl %0,%%esp"
+					:
+					:"r"(&idle.stackframe));//每次进idle 都把esp 指回去
 	asm volatile ("sti");
 	while(1)
     {

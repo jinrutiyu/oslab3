@@ -1,4 +1,4 @@
 #include "process.h"
-// #define SHOWPROCESSCHANGE 
+// #define SHOW_PROCESS_CHANGE 
 void Log(char *temp,...);
 int ProcessTableIndex(ProcessTable *pcurrent);
