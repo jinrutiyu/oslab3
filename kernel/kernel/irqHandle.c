@@ -51,16 +51,10 @@ void irqHandle(struct TrapFrame *tf) {
 			break;
 		case 1000:
 			timerHandle();
-
 			if(current==&idle)
-			{
 				__ptr=0;
-			}
-			else
-			{
-				//change the esp to the Process temp's PCB
-				__ptr=(uint32_t)&current->stackframe;
-			}			
+			else				//change the esp to the Process temp's PCB
+				__ptr=(uint32_t)&current->stackframe;		
 			// Log("__ptr=%x",__ptr);
 			break;
 		default:Log("\nirq::%d\n",tf->irq);assert(0);
@@ -78,7 +72,6 @@ void do_sys_write(struct TrapFrame *tf)
 {
 	if (tf->ebx == 1 || tf->ebx == 2)
 	{
-		Log("write::%x\n",GET_SEG_BASE(current->data_seg));
 		char *buf=(void *)tf->ecx+GET_SEG_BASE(current->data_seg);/*偏移量*/
 		int len=tf->edx;
 		int retlen=0;

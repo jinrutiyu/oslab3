@@ -6,8 +6,12 @@ ProcessTable idle;
 ProcessTable pcb_tb[NR_MAX_PCB];
 ProcessTable * current;
 
+
+
+
 extern SegDesc gdt[NR_SEGMENTS];
 extern TSS tss;
+extern uint32_t __ptr;
 
 #define SECTSIZE 512
 #define ELF_START_POS (201*SECTSIZE)
@@ -49,13 +53,15 @@ void initProcess()
 
 void schedule()
 {
-	Log("SCHEDULE");
+	Log("S");
 	
 	ProcessTable * toFirstBeScheduled=(current==&pcb_tb[0]?&pcb_tb[1]:&pcb_tb[0]);
 	ProcessTable * toNextBeScheduled=(toFirstBeScheduled==&pcb_tb[0]?&pcb_tb[1]:&pcb_tb[0]);
 	if(WAIT==toFirstBeScheduled->state)
 	{
-		Log("\n%d->%d\n",ProcessTableIndex(current),ProcessTableIndex(toFirstBeScheduled));
+		#ifdef SHOWPROCESSCHANGE
+			Log("\n%d->%d\n",ProcessTableIndex(current),ProcessTableIndex(toFirstBeScheduled));
+		#endif
 		current            =toFirstBeScheduled;
 		current->timeCount =10;
 		current->state     =RUN;
@@ -65,12 +71,17 @@ void schedule()
 		gdt[SEG_UCODE] = current->code_seg;
 		gdt[SEG_UDATA] = current->data_seg;
 		setGdt(gdt, sizeof(gdt));
+
+		//change the esp to the Process temp's PCB
+		__ptr=(uint32_t)&current->stackframe;
 		return;
 	}
 
 	if(WAIT==toNextBeScheduled->state)
 	{
-		Log("\n%d->%d\n",ProcessTableIndex(current),ProcessTableIndex(toNextBeScheduled));
+		#ifdef SHOWPROCESSCHANGE
+			Log("\n%d->%d\n",ProcessTableIndex(current),ProcessTableIndex(toNextBeScheduled));
+		#endif
 
 		current            =toNextBeScheduled;
 		current->timeCount =10;
@@ -81,12 +92,21 @@ void schedule()
 		gdt[SEG_UCODE] = current->code_seg;
 		gdt[SEG_UDATA] = current->data_seg;
 		setGdt(gdt, sizeof(gdt));
+
+		//change the esp to the Process temp's PCB
+		__ptr=(uint32_t)&current->stackframe;
 		return;
 	}
-	Log("\n%d->%d\n",ProcessTableIndex(current),-1);
+
+	#ifdef SHOWPROCESSCHANGE
+		Log("\n%d->%d\n",ProcessTableIndex(current),-1);
+	#endif
+
+
 	current=&idle;
 	current->state=RUN;
 	current->timeCount=10;
+	__ptr=0;
 	idle_fun();
 }
 
